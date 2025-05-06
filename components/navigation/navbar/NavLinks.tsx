@@ -11,15 +11,15 @@ import { cn } from "@/lib/utils";
 
 const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
     const pathname = usePathname();
-    const userId = 1;
+    const userId = "1";
     return (
         <>
             {sidebarLinks.map((item) => {
                 const isActive = pathname === item.route;
 
-                if (item.route === ROUTES.PROFILE) {
+                if (item.route === "/profile") {
                     if (userId) {
-                        item.route = `${ROUTES.PROFILE}/${userId}`;
+                        item.route = `${ROUTES.PROFILE(userId)}`;
                     } else {
                         return null;
                     }

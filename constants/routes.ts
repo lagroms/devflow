@@ -2,10 +2,10 @@ const ROUTES = {
     HOME: "/",
     SIGN_IN: "/sign-in",
     SIGN_UP: "/sign-up",
-    PROFILE: "/profile",
+    PROFILE: (id: string) => `/profile/${id}`,
     COMMUNITY: "/community",
     COLLECTION: "/collection",
-    TAGS: "/tags",
+    TAGS: (id: string) => `/tags${id}`,
     JOBS: "/find-jobs",
     ASK_QUESTION: "/ask-question",
 };

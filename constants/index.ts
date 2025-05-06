@@ -1,4 +1,5 @@
 import ROUTES from "./routes";
+
 export const sidebarLinks = [
     {
         imgURL: "/icons/home.svg",
@@ -22,12 +23,12 @@ export const sidebarLinks = [
     },
     {
         imgURL: "/icons/tag.svg",
-        route: ROUTES.TAGS,
+        route: "/tags",
         label: "Tags",
     },
     {
         imgURL: "/icons/user.svg",
-        route: ROUTES.PROFILE,
+        route: "/profile",
         label: "Profile",
     },
     {

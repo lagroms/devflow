@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import React from "react";
 import { Toaster } from "sonner";
 
@@ -55,7 +56,7 @@ const RootLayout = async ({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        {children}
+                        <NuqsAdapter>{children}</NuqsAdapter>
                     </ThemeProvider>
                     <Toaster richColors />
                 </body>

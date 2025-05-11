@@ -8,14 +8,14 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { Input } from "../ui/input";
 
 interface LocalSearchProps {
-    route: string;
+    // route: string;
     imgSrc: string;
     placeholder: string;
     otherClasses?: string;
 }
 
 const LocalSearch = ({
-    route,
+    // route,
     imgSrc,
     placeholder,
     otherClasses,
@@ -24,6 +24,7 @@ const LocalSearch = ({
     const [_, setSearchQuery] = useQueryState("query", {
         defaultValue: "",
         shallow: false,
+        scroll: false,
     });
 
     const debouncedValue = useDebounce(inputValue);

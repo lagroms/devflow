@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { type SearchParams } from "nuqs/server";
 
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -17,9 +18,9 @@ const Home = async ({ searchParams }: PageProps) => {
             description:
                 "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
             tags: [
-                { _id: 1, name: "Next.js" },
-                { _id: 2, name: "React" },
-                { _id: 3, name: "Web Development" },
+                { _id: 1, name: "Next.js", value: "nextjs" },
+                { _id: 2, name: "React", value: "react" },
+                { _id: 3, name: "Web Development", value: "webdevelopment" },
             ],
             author: "John Doe",
             createdAt: new Date(),
@@ -29,14 +30,10 @@ const Home = async ({ searchParams }: PageProps) => {
         },
         {
             _id: 2,
-            title: "How to learn Javacript",
+            title: "How to learn JavaScript",
             description:
                 "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-            tags: [
-                { _id: 1, name: "Next.js" },
-                { _id: 2, name: "React" },
-                { _id: 3, name: "Web Development" },
-            ],
+            tags: [{ _id: 4, name: "JavaScript", value: "javascript" }],
             author: "John Doe",
             createdAt: new Date(),
             upvotes: 10,
@@ -48,11 +45,7 @@ const Home = async ({ searchParams }: PageProps) => {
             title: "Who created Ruby on rails",
             description:
                 "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-            tags: [
-                { _id: 1, name: "Next.js" },
-                { _id: 2, name: "React" },
-                { _id: 3, name: "Web Development" },
-            ],
+            tags: [{ _id: 5, name: "Ruby on Rails", value: "rubyonrails" }],
             author: "John Doe",
             createdAt: new Date(),
             upvotes: 10,
@@ -61,11 +54,25 @@ const Home = async ({ searchParams }: PageProps) => {
         },
     ];
 
-    const { query = "" } = await searchParams;
+    const { query = "", filter = "" } = await searchParams;
 
     const filteredQuestions = questions.filter((question) => {
         const searchQuery = Array.isArray(query) ? query[0] : query;
-        return question.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const filterValue = Array.isArray(filter) ? filter[0] : filter;
+
+        const matchesSearch = question.title
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
+
+        // If no filter is selected, only filter by search
+        if (!filterValue) return matchesSearch;
+
+        // Check if any of the question's tags match the filter
+        const matchesFilter = question.tags.some(
+            (tag) => tag.value.toLowerCase() === filterValue.toLowerCase()
+        );
+
+        return matchesSearch && matchesFilter;
     });
 
     return (
@@ -81,13 +88,13 @@ const Home = async ({ searchParams }: PageProps) => {
             </section>
             <section className="mt-11">
                 <LocalSearch
-                    route="/"
+                    // route="/"
                     imgSrc="/icons/search.svg"
                     placeholder="Search questions..."
                     otherClasses="flex-1"
                 />
             </section>
-            {/* HomeFilter */}
+            <HomeFilter />
             <div className="mt-10 flex w-full flex-col gap-6">
                 {filteredQuestions.map((question) => (
                     <h1 key={question._id}>{question.title}</h1>

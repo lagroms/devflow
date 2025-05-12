@@ -42,6 +42,14 @@ const eslintConfig = [
             "import/no-unresolved": "error",
             "import/no-duplicates": "error",
         },
+        overrides: [
+            {
+                files: ["*.ts", "*.tsx"],
+                rules: {
+                    "no-undef": "off",
+                },
+            },
+        ],
     },
 ];
 

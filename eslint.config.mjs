@@ -51,6 +51,11 @@ const eslintConfig = [
                 },
             },
         ],
+        settings: {
+            "readable-tailwind": {
+                entryPoint: "src/global.css",
+            },
+        },
     },
 ];
 

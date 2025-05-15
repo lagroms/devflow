@@ -6,67 +6,68 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import handleError from "@/lib/handlers/error";
 
 type PageProps = {
     searchParams: Promise<SearchParams>;
 };
 
-const Home = async ({ searchParams }: PageProps) => {
-    const questions = [
-        {
+const questions = [
+    {
+        _id: "1",
+        title: "Who created Next.js?",
+        description:
+            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
+        tags: [
+            { _id: "1", name: "Next.js" },
+            { _id: "2", name: "React" },
+            { _id: "3", name: "Web Development" },
+        ],
+        author: {
             _id: "1",
-            title: "Who created Next.js?",
-            description:
-                "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-            tags: [
-                { _id: "1", name: "Next.js" },
-                { _id: "2", name: "React" },
-                { _id: "3", name: "Web Development" },
-            ],
-            author: {
-                _id: "1",
-                name: "John Doe",
-                image: "https://avatar.iran.liara.run/public",
-            },
-            createdAt: new Date(),
-            upvotes: 10,
-            views: 100,
-            answers: 5,
+            name: "John Doe",
+            image: "https://avatar.iran.liara.run/public",
         },
-        {
-            _id: "2",
-            title: "How to learn JavaScript",
-            description:
-                "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-            tags: [{ _id: "4", name: "JavaScript" }],
-            author: {
-                _id: "1",
-                name: "John Doe",
-                image: "https://avatar.iran.liara.run/public",
-            },
-            createdAt: new Date(),
-            upvotes: 10,
-            views: 100,
-            answers: 5,
+        createdAt: new Date(),
+        upvotes: 10,
+        views: 100,
+        answers: 5,
+    },
+    {
+        _id: "2",
+        title: "How to learn JavaScript",
+        description:
+            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
+        tags: [{ _id: "4", name: "JavaScript" }],
+        author: {
+            _id: "1",
+            name: "John Doe",
+            image: "https://avatar.iran.liara.run/public",
         },
-        {
-            _id: "3",
-            title: "Who created Ruby on Rails?",
-            description:
-                "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-            tags: [{ _id: "5", name: "Ruby on Rails" }],
-            author: {
-                _id: "1",
-                name: "John Doe",
-                image: "https://avatar.iran.liara.run/public",
-            },
-            createdAt: new Date(),
-            upvotes: 10,
-            views: 100,
-            answers: 5,
+        createdAt: new Date(),
+        upvotes: 10,
+        views: 100,
+        answers: 5,
+    },
+    {
+        _id: "3",
+        title: "Who created Ruby on Rails?",
+        description:
+            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
+        tags: [{ _id: "5", name: "Ruby on Rails" }],
+        author: {
+            _id: "1",
+            name: "John Doe",
+            image: "https://avatar.iran.liara.run/public",
         },
-    ];
+        createdAt: new Date(),
+        upvotes: 10,
+        views: 100,
+        answers: 5,
+    },
+];
 
+const Home = async ({ searchParams }: PageProps) => {
     const { query = "", filter = "" } = await searchParams;
 
     const filteredQuestions = questions.filter((question) => {

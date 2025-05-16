@@ -22,8 +22,6 @@ const eslintConfig = [
     ),
     {
         rules: {
-            // "@typescript-eslint/no-unused-vars": "warn",
-            // "no-unused-vars": "warn",
             "import/order": [
                 "error",
                 {
@@ -31,17 +29,29 @@ const eslintConfig = [
                         "builtin",
                         "external",
                         "internal",
-                        "parent",
-                        "sibling",
+                        ["parent", "sibling"],
                         "index",
+                        "object",
                     ],
                     "newlines-between": "always",
-                    alphabetize: { order: "asc", caseInsensitive: true },
+                    pathGroups: [
+                        {
+                            pattern: "@app/**",
+                            group: "external",
+                            position: "after",
+                        },
+                    ],
+                    pathGroupsExcludedImportTypes: ["builtin"],
+                    alphabetize: {
+                        order: "asc",
+                        caseInsensitive: true,
+                    },
                 },
             ],
             "import/no-unresolved": "error",
             "import/no-duplicates": "error",
         },
+
         overrides: [
             {
                 files: ["*.ts", "*.tsx"],

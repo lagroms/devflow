@@ -9,6 +9,7 @@ const ROUTES = {
     JOBS: "/find-jobs",
     ASK_QUESTION: "/ask-question",
     QUESTION: (id: string) => `/questions/${id}`,
+    SIGN_IN_WITH_OAUTH: "signin-with-oauth",
 };
 
 export default ROUTES;

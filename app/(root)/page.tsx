@@ -6,8 +6,7 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import { api } from "@/lib/api";
-import handleError from "@/lib/handlers/error";
+import { auth } from "@/auth";
 
 type PageProps = {
     searchParams: Promise<SearchParams>;
@@ -68,17 +67,10 @@ const questions = [
     },
 ];
 
-const getAllUsers = async () => {
-    try {
-        return await api.users.getAll();
-    } catch (error) {
-        handleError(error);
-    }
-};
-
 const Home = async ({ searchParams }: PageProps) => {
-    const users = await getAllUsers();
-    console.log("🚀 ~ users >>", users);
+    const session = await auth();
+    console.log("🚀 ~ session >>", session);
+
     const { query = "", filter = "" } = await searchParams;
 
     const filteredQuestions = questions.filter((question) => {

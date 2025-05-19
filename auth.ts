@@ -3,7 +3,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { api } from "./lib/api";
 import { IAccountDoc } from "./database/account.model";
-import { signInSchema } from "./lib/validations";
+import { SignInSchema } from "./lib/validations";
 import bcrypt from "bcryptjs";
 import { IUserDoc } from "./database/user.model";
 import Credentials from "next-auth/providers/credentials";
@@ -14,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         Google,
         Credentials({
             async authorize(credentials) {
-                const validatedFields = signInSchema.safeParse(credentials);
+                const validatedFields = SignInSchema.safeParse(credentials);
                 if (validatedFields.success) {
                     const { email, password } = validatedFields.data;
                     const { data: existingAccount } =

@@ -22,11 +22,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
     schema: ZodType<T>;
     defaultValues: T;
-    onSubmit: (data: T) => Promise<{ success: boolean }>;
+    onSubmit: (data: T) => Promise<ActionResponse>;
     formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -40,9 +42,20 @@ const AuthForm = <T extends FieldValues>({
         resolver: zodResolver(schema),
         defaultValues: defaultValues as DefaultValues<T>,
     });
+    const router = useRouter();
 
-    const handleSubmit: SubmitHandler<T> = async () => {
-        // TODO >> authenticate the user
+    const handleSubmit: SubmitHandler<T> = async (data) => {
+        const result = (await onSubmit(data)) as ActionResponse;
+        if (result?.success) {
+            toast.success(
+                formType === "SIGN_IN"
+                    ? "Signed in successfully"
+                    : "Signed up successfully"
+            );
+            router.push(ROUTES.HOME);
+        } else {
+            toast.error("Something went wrong");
+        }
     };
 
     const buttonText = formType === "SIGN_IN" ? "Sign in" : "Sign up";

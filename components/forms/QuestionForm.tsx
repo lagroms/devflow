@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import { Path, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,20 +22,32 @@ import { Input } from "../ui/input";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
 import TagCard from "../cards/TagCard";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import ROUTES from "@/constants/routes";
+import { Loader } from "lucide-react";
 
 const Editor = dynamic(() => import("../editor"), {
     ssr: false,
 });
 
-const QuestionForm = () => {
+interface QuestionFormProps {
+    isEdit?: boolean;
+    question?: Question;
+}
+
+const QuestionForm = ({ isEdit = false, question }: QuestionFormProps) => {
+    const router = useRouter();
     const editorRef = useRef<MDXEditorMethods>(null);
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<z.infer<typeof AskQuestionSchema>>({
         resolver: zodResolver(AskQuestionSchema),
         defaultValues: {
-            title: "",
-            content: "",
-            tags: [],
+            title: question?.title || "",
+            content: question?.content || "",
+            tags: question?.tags.map((tag) => tag.name) || [],
         },
     });
 
@@ -81,8 +93,40 @@ const QuestionForm = () => {
         }
     };
 
-    const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-        // console.log("QUESTION DATA ", data);
+    const handleCreateQuestion = async (
+        data: z.infer<typeof AskQuestionSchema>
+    ) => {
+        startTransition(async () => {
+            if (isEdit && question) {
+                const result = await editQuestion({
+                    ...data,
+                    questionId: question._id,
+                });
+
+                if (result.success) {
+                    toast.success("Question updated successfully");
+                    if (result.data)
+                        router.push(ROUTES.QUESTION(result.data._id));
+                } else {
+                    toast.error(
+                        result.error?.message || "Failed to updated question"
+                    );
+                }
+
+                return;
+            }
+
+            const result = await createQuestion(data);
+
+            if (result.success) {
+                toast.success("Question created successfully");
+                if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+            } else {
+                toast.error(
+                    result.error?.message || "Failed to create question"
+                );
+            }
+        });
     };
 
     return (
@@ -192,8 +236,16 @@ const QuestionForm = () => {
                     <Button
                         type="submit"
                         className="primary-gradient !text-light-900 w-fit"
+                        disabled={isPending}
                     >
-                        Ask A Question
+                        {isPending ? (
+                            <>
+                                <Loader className="size-4 mr-2 animate-spin" />
+                                <span>Submitting...</span>
+                            </>
+                        ) : (
+                            <>{isEdit ? "Edit" : "Ask A Question"}</>
+                        )}
                     </Button>
                 </div>
             </form>

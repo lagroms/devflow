@@ -1,15 +1,10 @@
 import Link from "next/link";
-import { type SearchParams } from "nuqs/server";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-
-type PageProps = {
-    searchParams: Promise<SearchParams>;
-};
 
 const questions = [
     {
@@ -66,23 +61,20 @@ const questions = [
     },
 ];
 
-const Home = async ({ searchParams }: PageProps) => {
+const Home = async ({ searchParams }: RouteParams) => {
     const { query = "", filter = "" } = await searchParams;
 
     const filteredQuestions = questions.filter((question) => {
-        const searchQuery = Array.isArray(query) ? query[0] : query;
-        const filterValue = Array.isArray(filter) ? filter[0] : filter;
-
         const matchesSearch = question.title
             .toLowerCase()
-            .includes(searchQuery.toLowerCase());
+            .includes(query.toLowerCase());
 
         // If no filter is selected, only filter by search
-        if (!filterValue) return matchesSearch;
+        if (!filter) return matchesSearch;
 
         // Check if any of the question's tags match the filter
         const matchesFilter = question.tags.some(
-            (tag: Tag) => tag.name.toLowerCase() === filterValue.toLowerCase()
+            (tag: Tag) => tag.name.toLowerCase() === filter.toLowerCase()
         );
 
         return matchesSearch && matchesFilter;

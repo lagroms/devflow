@@ -81,7 +81,6 @@ const AuthForm = <T extends FieldValues>({
                                 </FormLabel>
                                 <FormControl>
                                     <Input
-                                        required
                                         type={
                                             field.name === "password"
                                                 ? "password"

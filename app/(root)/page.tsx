@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import { getQuestions } from "@/lib/actions/question.action";
 import { filter } from "@mdxeditor/editor";
+import DataRenderer from "@/components/DataRenderer";
+import { EMPTY_QUESTION } from "@/constants/states";
 
 const Home = async ({ searchParams }: RouteParams) => {
     const { page, pageSize, query, filter } = await searchParams;
@@ -19,7 +21,6 @@ const Home = async ({ searchParams }: RouteParams) => {
     });
 
     const { questions } = data || {};
-    console.log("🚀 ~ data >>", data);
 
     return (
         <>
@@ -41,30 +42,22 @@ const Home = async ({ searchParams }: RouteParams) => {
                 />
             </section>
             <HomeFilter />
-            {success ? (
-                <div className="mt-10 flex w-full flex-col gap-6">
-                    {questions && questions.length > 0 ? (
-                        questions.map((question) => (
+            <DataRenderer
+                success={success}
+                error={error}
+                data={questions}
+                empty={EMPTY_QUESTION}
+                render={(questions) => (
+                    <div className="mt-10 flex w-full flex-col gap-6">
+                        {questions.map((question) => (
                             <QuestionCard
                                 key={question._id}
                                 question={question}
                             />
-                        ))
-                    ) : (
-                        <div className="mt-10 w-full flex-center">
-                            <p className="text-dark400_light700">
-                                No questions found
-                            </p>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <div className="mt-10 flex-center w-full">
-                    <p className="text-dark400_light700">
-                        {error?.message || "Failed to fetch questions"}
-                    </p>
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
+            />
         </>
     );
 };

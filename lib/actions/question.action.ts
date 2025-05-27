@@ -14,6 +14,7 @@ import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion, { ITagQuestion } from "@/database/tag-question.model";
 import { NotFoundError, UnauthorizedError } from "../http-errors";
 import { FilterQuery } from "mongoose";
+import logger from "../logger";
 
 export async function createQuestion(
     params: CreateQuestionParams
@@ -247,6 +248,8 @@ export async function getQuestions(
         filter,
         sort,
     } = validationResult.params!;
+
+    logger.info(validationResult.params);
 
     const skip = (Number(page) - 1) * Number(pageSize);
     const limit = Number(pageSize);

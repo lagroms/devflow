@@ -5,80 +5,21 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-
-const questions = [
-    {
-        _id: "1",
-        title: "Who created Next.js?",
-        description:
-            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-        tags: [
-            { _id: "1", name: "Next.js" },
-            { _id: "2", name: "React" },
-            { _id: "3", name: "Web Development" },
-        ],
-        author: {
-            _id: "1",
-            name: "John Doe",
-            image: "https://avatar.iran.liara.run/public",
-        },
-        createdAt: new Date(),
-        upvotes: 10,
-        views: 100,
-        answers: 5,
-    },
-    {
-        _id: "2",
-        title: "How to learn JavaScript",
-        description:
-            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-        tags: [{ _id: "4", name: "JavaScript" }],
-        author: {
-            _id: "1",
-            name: "John Doe",
-            image: "https://avatar.iran.liara.run/public",
-        },
-        createdAt: new Date(),
-        upvotes: 10,
-        views: 100,
-        answers: 5,
-    },
-    {
-        _id: "3",
-        title: "Who created Ruby on Rails?",
-        description:
-            "Next.js is a React framework for building server-side rendered (SSR), static, and hybrid web applications using React. It is a popular choice for building scalable and performant web applications.",
-        tags: [{ _id: "5", name: "Ruby on Rails" }],
-        author: {
-            _id: "1",
-            name: "John Doe",
-            image: "https://avatar.iran.liara.run/public",
-        },
-        createdAt: new Date(),
-        upvotes: 10,
-        views: 100,
-        answers: 5,
-    },
-];
+import { getQuestions } from "@/lib/actions/question.action";
+import { filter } from "@mdxeditor/editor";
 
 const Home = async ({ searchParams }: RouteParams) => {
-    const { query = "", filter = "" } = await searchParams;
+    const { page, pageSize, query, filter } = await searchParams;
 
-    const filteredQuestions = questions.filter((question) => {
-        const matchesSearch = question.title
-            .toLowerCase()
-            .includes(query.toLowerCase());
-
-        // If no filter is selected, only filter by search
-        if (!filter) return matchesSearch;
-
-        // Check if any of the question's tags match the filter
-        const matchesFilter = question.tags.some(
-            (tag: Tag) => tag.name.toLowerCase() === filter.toLowerCase()
-        );
-
-        return matchesSearch && matchesFilter;
+    const { success, data, error } = await getQuestions({
+        page: Number(page) || 1,
+        pageSize: Number(pageSize) || 10,
+        query: query || "",
+        filter: filter || "",
     });
+
+    const { questions } = data || {};
+    console.log("🚀 ~ data >>", data);
 
     return (
         <>
@@ -100,11 +41,30 @@ const Home = async ({ searchParams }: RouteParams) => {
                 />
             </section>
             <HomeFilter />
-            <div className="mt-10 flex w-full flex-col gap-6">
-                {filteredQuestions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
-                ))}
-            </div>
+            {success ? (
+                <div className="mt-10 flex w-full flex-col gap-6">
+                    {questions && questions.length > 0 ? (
+                        questions.map((question) => (
+                            <QuestionCard
+                                key={question._id}
+                                question={question}
+                            />
+                        ))
+                    ) : (
+                        <div className="mt-10 w-full flex-center">
+                            <p className="text-dark400_light700">
+                                No questions found
+                            </p>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="mt-10 flex-center w-full">
+                    <p className="text-dark400_light700">
+                        {error?.message || "Failed to fetch questions"}
+                    </p>
+                </div>
+            )}
         </>
     );
 };

@@ -35,7 +35,7 @@ const Home = async ({ searchParams }: RouteParams) => {
             </section>
             <section className="mt-11">
                 <LocalSearch
-                    // route="/"
+                    // route={ROUTES.HOME}
                     imgSrc="/icons/search.svg"
                     placeholder="Search questions..."
                     otherClasses="flex-1"

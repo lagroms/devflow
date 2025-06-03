@@ -241,13 +241,7 @@ export async function getQuestions(
         return handleError(validationResult) as ErrorResponse;
     }
 
-    const {
-        page = 1,
-        pageSize = 10,
-        query,
-        filter,
-        sort,
-    } = validationResult.params!;
+    const { page = 1, pageSize = 10, query, filter } = validationResult.params!;
 
     logger.info(validationResult.params);
 
@@ -256,6 +250,7 @@ export async function getQuestions(
 
     const filterQuery: FilterQuery<typeof Question> = {};
 
+    // TODO later
     if (filter === "recommended") {
         return { success: true, data: { questions: [], isNext: false } };
     }
@@ -269,7 +264,7 @@ export async function getQuestions(
 
     let sortCriteria = {};
 
-    switch (sort) {
+    switch (filter) {
         case "newest":
             sortCriteria = { createdAt: -1 };
             break;

@@ -161,6 +161,12 @@ export async function editQuestion(
                 { session }
             );
 
+            // Delete tags that now have 0 questions
+            await Tag.deleteMany(
+                { _id: { $in: tagIdsToRemove }, questions: 0 },
+                { session }
+            );
+
             await TagQuestion.deleteMany(
                 {
                     tag: { $in: tagIdsToRemove },

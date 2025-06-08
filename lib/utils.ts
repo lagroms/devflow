@@ -43,3 +43,12 @@ export const getTechDescription = (techName: string) => {
         ? techDescriptionMap[normalizedTechName]
         : `${techName} is a technology or tool widely used in web development, providing valuable features and capabilities.`;
 };
+
+export const formatNumber = (value: number) => {
+    if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1)}M`;
+    } else if (value >= 1000) {
+        return `${(value / 1000).toFixed(1)}K`;
+    }
+    return value.toString();
+};

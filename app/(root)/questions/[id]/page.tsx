@@ -3,22 +3,24 @@ import Preview from "@/components/editor/Preview";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber } from "@/lib/utils";
-import {
-    differenceInDays,
-    formatDistanceToNow,
-    formatRelative,
-} from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { title } from "process";
+import { after } from "next/server";
 import React from "react";
 
 const QuestionDetailsPage = async ({ params }: RouteParams) => {
     const { id } = await params;
 
     const { data: question, success } = await getQuestion({ questionId: id });
+
+    after(async () => {
+        await incrementViews({
+            questionId: id,
+        });
+    });
 
     if (!success || !question) {
         return notFound();

@@ -7,6 +7,7 @@ import {
     AskQuestionSchema,
     EditQuestionSchema,
     GetQuestionSchema,
+    IncrementViewsSchema,
     PaginatedSearchParamsSchema,
 } from "../validations";
 import mongoose from "mongoose";
@@ -310,6 +311,42 @@ export async function getQuestions(
                 questions: JSON.parse(JSON.stringify(questions)),
                 isNext,
             },
+        };
+    } catch (error) {
+        return handleError(error) as ErrorResponse;
+    }
+}
+
+export async function incrementViews(
+    params: IncrementViewsParams
+): Promise<ActionResponse<{ views: number }>> {
+    const validationResult = await action({
+        params,
+        schema: IncrementViewsSchema,
+    });
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult) as ErrorResponse;
+    }
+
+    const { questionId } = validationResult.params!;
+
+    try {
+        const question = await Question.findByIdAndUpdate(
+            questionId,
+            {
+                $inc: { views: 1 },
+            },
+            { new: true }
+        );
+
+        if (!question) {
+            throw new NotFoundError("Question");
+        }
+
+        return {
+            success: true,
+            data: { views: question?.views || 0 },
         };
     } catch (error) {
         return handleError(error) as ErrorResponse;

@@ -16,6 +16,7 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
     const { id } = await params;
 
     const { data: question, success } = await getQuestion({ questionId: id });
+    console.log("🚀 ~ question >>", question);
 
     after(async () => {
         await incrementViews({
@@ -94,7 +95,7 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
             </div>
 
             <section className="my-5">
-                <AnswerForm />
+                <AnswerForm questionId={question._id} />
             </section>
         </>
     );

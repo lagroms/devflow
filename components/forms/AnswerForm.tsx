@@ -12,18 +12,20 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { AnswerSchema } from "@/lib/validations";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "sonner";
 
 const Editor = dynamic(() => import("../editor"), {
     ssr: false,
 });
 
-const AnswerForm = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+    const [isAnswering, startAnswerTransition] = useTransition();
     const [isAISubmitting, setIsAISubmitting] = useState(false);
     const editorRef = useRef<MDXEditorMethods>(null);
     const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -34,7 +36,20 @@ const AnswerForm = () => {
     });
 
     const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-        console.log(values);
+        console.log("🚀 ~ values >>", values);
+        startAnswerTransition(async () => {
+            const result = await createAnswer({
+                questionId,
+                content: values.content,
+            });
+
+            if (result.success) {
+                form.reset();
+                toast.success("Answer posted successfully");
+            } else {
+                toast.error(result.error?.message);
+            }
+        });
     };
 
     return (
@@ -92,9 +107,9 @@ const AnswerForm = () => {
                         <Button
                             type="submit"
                             className="primary-gradient w-fit"
-                            disabled={isSubmitting}
+                            disabled={isAnswering}
                         >
-                            {isSubmitting ? (
+                            {isAnswering ? (
                                 <>
                                     <Loader2 className="mr-2 size-4 animate-spin" />{" "}
                                     Posting...

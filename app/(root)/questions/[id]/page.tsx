@@ -4,6 +4,7 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
@@ -16,7 +17,6 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
     const { id } = await params;
 
     const { data: question, success } = await getQuestion({ questionId: id });
-    console.log("🚀 ~ question >>", question);
 
     after(async () => {
         await incrementViews({
@@ -27,6 +27,18 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
     if (!success || !question) {
         return notFound();
     }
+
+    const {
+        data: answersData,
+        success: answersSuccess,
+        error: answersError,
+    } = await getAnswers({
+        questionId: id,
+        page: 1,
+        pageSize: 10,
+        filter: "latest",
+    });
+    console.log("🚀 ~ answersData >>", answersData);
 
     const { author, createdAt, answers, views, tags, content, title } =
         question;

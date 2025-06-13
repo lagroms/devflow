@@ -1,3 +1,4 @@
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
@@ -38,7 +39,6 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
         pageSize: 10,
         filter: "latest",
     });
-    console.log("🚀 ~ answersData >>", answersData);
 
     const { author, createdAt, answers, views, tags, content, title } =
         question;
@@ -105,6 +105,15 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
                     />
                 ))}
             </div>
+
+            <section className="my-5">
+                <AllAnswers
+                    data={answersData?.answers}
+                    success={answersSuccess}
+                    error={answersError}
+                    totalAnswers={answersData?.totalAnswers || 0}
+                />
+            </section>
 
             <section className="my-5">
                 <AnswerForm questionId={question._id} />

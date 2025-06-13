@@ -106,7 +106,7 @@ const QuestionForm = ({ isEdit = false, question }: QuestionFormProps) => {
                 if (result.success) {
                     toast.success("Question updated successfully");
                     if (result.data)
-                        router.push(ROUTES.QUESTION(result.data._id));
+                        router.push(ROUTES.QUESTION(result.data._id as string));
                 } else {
                     toast.error(
                         result.error?.message || "Failed to updated question"

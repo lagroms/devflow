@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^5.0.1
-        version: 5.1.0(react-hook-form@7.57.0(react@19.1.0))
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.57.0(react@19.1.0))
       '@mdxeditor/editor':
         specifier: ^3.32.2
         version: 3.35.0(@codemirror/language@6.11.1)(@lezer/highlight@1.2.1)(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yjs@13.6.27)
@@ -102,8 +102,8 @@ importers:
         specifier: ^0.5.4
         version: 0.5.4(react@19.1.0)
       zod:
-        specifier: ^3.24.3
-        version: 3.25.56
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -530,10 +530,10 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@hookform/resolvers@5.1.0':
-    resolution: {integrity: sha512-A5tY8gxqvvR0lFfropqpy/gUDOxjwT7LZCxJ8lNA9puK7nFNRl/O0egGKxzdF4JSz/pnnT1O8g76P/YMyTBEFw==}
+  '@hookform/resolvers@3.3.4':
+    resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
     peerDependencies:
-      react-hook-form: ^7.55.0
+      react-hook-form: ^7.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1427,9 +1427,6 @@ packages:
 
   '@rushstack/eslint-patch@1.11.0':
     resolution: {integrity: sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==}
-
-  '@standard-schema/utils@0.3.0':
-    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@stitches/core@1.2.8':
     resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
@@ -4750,6 +4747,9 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
+  zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+
   zod@3.25.56:
     resolution: {integrity: sha512-rd6eEF3BTNvQnR2e2wwolfTmUTnp70aUTqr0oaGbHifzC3BKJsoV+Gat8vxUMR1hwOKBs6El+qWehrHbCpW6SQ==}
 
@@ -5459,9 +5459,8 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@hookform/resolvers@5.1.0(react-hook-form@7.57.0(react@19.1.0))':
+  '@hookform/resolvers@3.3.4(react-hook-form@7.57.0(react@19.1.0))':
     dependencies:
-      '@standard-schema/utils': 0.3.0
       react-hook-form: 7.57.0(react@19.1.0)
 
   '@humanfs/core@0.19.1': {}
@@ -6510,8 +6509,6 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@rushstack/eslint-patch@1.11.0': {}
-
-  '@standard-schema/utils@0.3.0': {}
 
   '@stitches/core@1.2.8': {}
 
@@ -10412,6 +10409,8 @@ snapshots:
   zod-to-json-schema@3.24.5(zod@3.25.56):
     dependencies:
       zod: 3.25.56
+
+  zod@3.22.4: {}
 
   zod@3.25.56: {}
 

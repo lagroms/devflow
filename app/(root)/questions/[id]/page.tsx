@@ -2,7 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
-import React from "react";
+import React, { Suspense } from "react";
 
 import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
@@ -14,6 +14,7 @@ import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber } from "@/lib/utils";
 
 const QuestionDetailsPage = async ({ params }: RouteParams) => {
@@ -42,6 +43,11 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
         filter: "latest",
     });
 
+    const hasVotedPromise = hasVoted({
+        targetId: question._id,
+        targetType: "question",
+    });
+
     const { author, createdAt, answers, views, tags, content, title } =
         question;
 
@@ -64,12 +70,15 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
                         </Link>
                     </div>
                     <div className="flex justify-end">
-                        <Votes
-                            upvotes={question.upvotes}
-                            hasupVoted={true}
-                            hasdownVoted={false}
-                            downvotes={question.downvotes}
-                        />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Votes
+                                upvotes={question.upvotes}
+                                downvotes={question.downvotes}
+                                hasVotedPromise={hasVotedPromise}
+                                targetType="question"
+                                targetId={question._id}
+                            />
+                        </Suspense>
                     </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">

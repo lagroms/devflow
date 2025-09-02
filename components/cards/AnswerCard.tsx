@@ -1,9 +1,12 @@
-import React from "react";
-import UserAvatar from "../UserAvatar";
-import Link from "next/link";
-import ROUTES from "@/constants/routes";
 import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
+import React from "react";
+
+import ROUTES from "@/constants/routes";
+
+
 import Preview from "../editor/Preview";
+import UserAvatar from "../UserAvatar";
 
 const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
     return (

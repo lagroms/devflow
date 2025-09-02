@@ -1,14 +1,14 @@
+// import { filter } from "@mdxeditor/editor";
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
+import DataRenderer from "@/components/DataRenderer";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import { getQuestions } from "@/lib/actions/question.action";
-import { filter } from "@mdxeditor/editor";
-import DataRenderer from "@/components/DataRenderer";
 import { EMPTY_QUESTION } from "@/constants/states";
+import { getQuestions } from "@/lib/actions/question.action";
 
 const Home = async ({ searchParams }: RouteParams) => {
     const { page, pageSize, query, filter } = await searchParams;

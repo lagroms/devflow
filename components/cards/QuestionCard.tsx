@@ -1,7 +1,9 @@
-import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import React from "react";
+
 import ROUTES from "@/constants/routes";
+
 import TagCard from "./TagCard";
 import Metric from "../Metric";
 

@@ -1,3 +1,4 @@
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -14,7 +15,6 @@ import {
 import ROUTES from "@/constants/routes";
 
 import NavLinks from "./NavLinks";
-import { LogOut } from "lucide-react";
 
 const MobileNavigation = async () => {
     const session = await auth();

@@ -1,8 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MDXEditorMethods } from "@mdxeditor/editor";
+import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -11,16 +19,9 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import { AnswerSchema } from "@/lib/validations";
-import { useRef, useState, useTransition } from "react";
-import dynamic from "next/dynamic";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
-import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { api } from "@/lib/api";
+import { AnswerSchema } from "@/lib/validations";
 
 const Editor = dynamic(() => import("../editor"), {
     ssr: false,

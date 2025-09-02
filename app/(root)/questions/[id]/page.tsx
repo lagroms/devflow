@@ -1,18 +1,20 @@
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { after } from "next/server";
+import React from "react";
+
 import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber } from "@/lib/utils";
-import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { after } from "next/server";
-import React from "react";
 
 const QuestionDetailsPage = async ({ params }: RouteParams) => {
     const { id } = await params;
@@ -62,7 +64,12 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
                         </Link>
                     </div>
                     <div className="flex justify-end">
-                        <p>votes</p>
+                        <Votes
+                            upvotes={question.upvotes}
+                            hasupVoted={true}
+                            hasdownVoted={false}
+                            downvotes={question.downvotes}
+                        />
                     </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">

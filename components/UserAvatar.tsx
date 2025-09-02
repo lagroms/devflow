@@ -1,8 +1,11 @@
-import ROUTES from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
+import ROUTES from "@/constants/routes";
 import { cn } from "@/lib/utils";
+
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
 
 interface UserAvatarProps {
     id: string;

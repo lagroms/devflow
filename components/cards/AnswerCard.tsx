@@ -1,14 +1,27 @@
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
 import ROUTES from "@/constants/routes";
-
+import { hasVoted } from "@/lib/actions/vote.action";
 
 import Preview from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
+import Votes from "../votes/Votes";
 
-const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
+const AnswerCard = ({
+    _id,
+    content,
+    createdAt,
+    author,
+    upvotes,
+    downvotes,
+}: Answer) => {
+    console.log("🚀 ~ _id >>", _id);
+    const hasVotedPromise = hasVoted({
+        targetId: _id,
+        targetType: "answer",
+    });
     return (
         <article className="light-border border-b py-10">
             <span className="hash-span" id={JSON.stringify(_id)} />
@@ -36,7 +49,17 @@ const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
                     </Link>
                 </div>
 
-                <div className="flex justify-end">Votes</div>
+                <div className="flex justify-end">
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Votes
+                            targetType="answer"
+                            targetId={_id}
+                            upvotes={upvotes}
+                            downvotes={downvotes}
+                            hasVotedPromise={hasVotedPromise}
+                        />
+                    </Suspense>
+                </div>
             </div>
 
             <Preview content={content} />

@@ -125,7 +125,7 @@ export const getAnswers = async (
         return {
             success: true,
             data: {
-                answers,
+                answers: JSON.parse(JSON.stringify(answers)),
                 isNext,
                 totalAnswers,
             },

@@ -18,7 +18,6 @@ import {
     PaginatedSearchParamsSchema,
 } from "../validations";
 
-
 export async function createQuestion(
     params: CreateQuestionParams
 ): Promise<ActionResponse<Question>> {
@@ -226,6 +225,7 @@ export async function getQuestion(
         const question = await Question.findById(questionId)
             .populate("tags")
             .populate("author", "_id name image");
+
         if (!question) {
             throw new NotFoundError("Question");
         }

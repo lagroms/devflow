@@ -5,6 +5,7 @@ import { after } from "next/server";
 import React, { Suspense } from "react";
 
 import AllAnswers from "@/components/answers/AllAnswers";
+import LoginPrompt from "@/components/auth/LoginPrompt";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
@@ -20,13 +21,29 @@ import { formatNumber } from "@/lib/utils";
 const QuestionDetailsPage = async ({ params }: RouteParams) => {
     const { id } = await params;
 
-    const { data: question, success } = await getQuestion({ questionId: id });
+    const {
+        data: question,
+        success,
+        error,
+    } = await getQuestion({ questionId: id });
 
     after(async () => {
         await incrementViews({
             questionId: id,
         });
     });
+
+    // Handle unauthorized access
+    if (!success && error?.message === "Unauthorized") {
+        return (
+            <LoginPrompt
+                title="Login Required"
+                message="You need to be logged in to view question details. Please sign in to continue."
+            />
+        );
+    }
+
+    // Handle question not found
 
     if (!success || !question) {
         return notFound();

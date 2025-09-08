@@ -1,11 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import ROUTES from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-
 
 interface UserAvatarProps {
     id: string;
@@ -31,7 +29,7 @@ export default function UserAvatar({
 
     return (
         <Link href={ROUTES.PROFILE(id)}>
-            <Avatar className={className}>
+            <Avatar className={cn(className, "relative")}>
                 {imageUrl ? (
                     <AvatarImage src={imageUrl} />
                 ) : (

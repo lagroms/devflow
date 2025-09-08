@@ -2,18 +2,26 @@
 
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { use, useState } from "react";
 import { toast } from "sonner";
 
 import { toggleSaveQuestion } from "@/lib/actions/collection.action";
 
-const SaveQuestion = ({ questionId }: { questionId: string }) => {
+const SaveQuestion = ({
+    questionId,
+    hasSavedPromise,
+}: {
+    questionId: string;
+    hasSavedPromise: Promise<ActionResponse<{ saved: boolean }>>;
+}) => {
     const session = useSession();
 
     const userId = session?.data?.user?.id;
     const [isLoading, setIsLoading] = useState(false);
 
-    const hasSaved = false;
+    // const hasSaved = false;
+    const { data } = use(hasSavedPromise);
+    const { saved: hasSaved } = data || {};
 
     const handleSave = async () => {
         if (isLoading) return;

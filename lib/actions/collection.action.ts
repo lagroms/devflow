@@ -16,6 +16,7 @@ export async function toggleSaveQuestion(
     const validationResult = await action({
         params,
         schema: CollectionBaseSchema,
+        authorize: true,
     });
 
     if (validationResult instanceof Error) {
@@ -38,7 +39,7 @@ export async function toggleSaveQuestion(
         });
 
         if (collection) {
-            await Collection.findByIdAndDelete(collection._id);
+            await Collection.findByIdAndDelete(collection.id);
             return { success: true, data: { saved: false } };
         } else {
             await Collection.create({ question: questionId, author: userId });

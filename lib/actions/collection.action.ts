@@ -177,7 +177,7 @@ export async function getSavedQuestions(
 
         const questions = await Collection.aggregate([...pipeline]);
 
-        const isNext = skip + questions.length < totalCount.count;
+        const isNext = skip + questions.length < (totalCount?.count || 0);
 
         return {
             success: true,

@@ -84,6 +84,7 @@ const Editor = ({ value, editorRef, fieldChange }: Props) => {
                         shell: "shell",
                         sh: "shell",
                         "": "unspecified",
+                        "N/A": "unspecified",
                         tsx: "TypeScript (React)",
                         jsx: "JavaScript (React)",
                     },

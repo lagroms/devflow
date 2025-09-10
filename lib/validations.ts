@@ -179,7 +179,7 @@ export const AIAnswerSchema = z.object({
     question: z
         .string()
         .min(5, { message: "Question is required." })
-        .max(130, { message: "Question cannot exceed 130 characters." }),
+        .max(130, { message: "Question cannot exceed 130 characters." }), // TODO >> is this validation necessary to validate AI answer?
     content: z
         .string()
         .min(50, { message: "Answer has to have more than 50 characters." }),

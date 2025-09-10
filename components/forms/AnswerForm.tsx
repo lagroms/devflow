@@ -71,109 +71,155 @@ const AnswerForm = ({
 
     const generateAIAnswer = async () => {
         if (session.status !== "authenticated") {
-            return toast.error("Please login", {
-                description: "Please login to use this feature",
+            return toast.error("Please log in", {
+                description: "You need to be logged in to use this feature",
             });
         }
 
         setIsAISubmitting(true);
 
-        const userAnswer = editorRef.current?.getMarkdown();
-
         try {
             const { success, data, error } = await api.ai.getAnswer(
                 questionTitle,
-                questionContent,
-                userAnswer
+                questionContent
             );
 
             if (!success) {
-                toast.error("Error", {
+                return toast.error("Error", {
                     description: error?.message,
                 });
             }
 
-            console.log("🚀 ~ data >>", data);
-
-            if (!data) {
-                toast.error("No answer generated");
-                return;
-            }
-
-            // Clean and format the markdown content for MDX Editor while preserving formatting
-            let formattedAnswer = data.toString().trim();
-
-            // Only remove problematic HTML tags, preserve markdown
-            formattedAnswer = formattedAnswer
-                .replace(/<br\s*\/?>/gi, "\n")
-                .replace(/<\/?p>/gi, "") // Remove paragraph tags but keep content
-                .replace(/\n\s*\n\s*\n/g, "\n\n") // Normalize excessive line breaks
+            const formattedAnswer = data
+                ?.replace(/<br>/g, " ")
+                ?.toString()
                 .trim();
 
-            // Fix any unsupported code block languages
-            formattedAnswer = formattedAnswer.replace(
-                /```(\w+)/g,
-                (match, lang) => {
-                    // Map common language variations to supported ones
-                    const langMap: Record<string, string> = {
-                        RR: "r",
-                        R: "r",
-                        python: "python",
-                        py: "python",
-                        javascript: "js",
-                        typescript: "ts",
-                        shell: "bash",
-                        sh: "bash",
-                    };
-                    const mappedLang = langMap[lang] || lang.toLowerCase();
-                    return `\`\`\`${mappedLang}`;
-                }
-            );
+            if (editorRef.current) {
+                editorRef.current.setMarkdown(formattedAnswer || "");
 
-            if (editorRef.current && formattedAnswer) {
-                try {
-                    editorRef.current.setMarkdown(formattedAnswer);
-                    form.setValue("content", formattedAnswer);
-                    form.trigger("content");
-                    toast.success("Answer generated successfully");
-                } catch (editorError) {
-                    console.error(
-                        "Editor markdown parsing error:",
-                        editorError
-                    );
-
-                    // Try a more gentle approach - just normalize whitespace
-                    const normalizedAnswer = formattedAnswer
-                        .replace(/\r\n/g, "\n")
-                        .replace(/\r/g, "\n")
-                        .replace(/\n{3,}/g, "\n\n")
-                        .trim();
-
-                    try {
-                        editorRef.current.setMarkdown(normalizedAnswer);
-                        form.setValue("content", normalizedAnswer);
-                        form.trigger("content");
-                        toast.success("Answer generated successfully");
-                    } catch (secondError) {
-                        console.error("Second attempt failed:", secondError);
-                        toast.error("Failed to format answer", {
-                            description:
-                                "The generated content could not be properly formatted",
-                        });
-                    }
-                }
+                form.setValue("content", formattedAnswer || "");
+                form.trigger("content");
             }
+
+            toast.success("Success", {
+                description: "AI generated answer has been generated",
+            });
         } catch (error) {
             toast.error("Error", {
                 description:
                     error instanceof Error
                         ? error.message
-                        : "Something went wrong",
+                        : "There was a problem with your request",
             });
         } finally {
             setIsAISubmitting(false);
         }
     };
+
+    // const generateAIAnswer = async () => {
+    //     if (session.status !== "authenticated") {
+    //         return toast.error("Please login", {
+    //             description: "Please login to use this feature",
+    //         });
+    //     }
+
+    //     setIsAISubmitting(true);
+
+    //     const userAnswer = editorRef.current?.getMarkdown();
+
+    //     try {
+    //         const { success, data, error } = await api.ai.getAnswer(
+    //             questionTitle,
+    //             questionContent,
+    //             userAnswer
+    //         );
+
+    //         if (!success) {
+    //             toast.error("Error", {
+    //                 description: error?.message,
+    //             });
+    //         }
+
+    //         if (!data) {
+    //             toast.error("No answer generated");
+    //             return;
+    //         }
+
+    //         // Clean and format the markdown content for MDX Editor while preserving formatting
+    //         let formattedAnswer = data.toString().trim();
+
+    //         // Only remove problematic HTML tags, preserve markdown
+    //         formattedAnswer = formattedAnswer
+    //             .replace(/<br\s*\/?>/gi, "\n")
+    //             .replace(/<\/?p>/gi, "") // Remove paragraph tags but keep content
+    //             .replace(/\n\s*\n\s*\n/g, "\n\n") // Normalize excessive line breaks
+    //             .trim();
+
+    //         // Fix any unsupported code block languages
+    //         formattedAnswer = formattedAnswer.replace(
+    //             /```(\w+)/g,
+    //             (match, lang) => {
+    //                 // Map common language variations to supported ones
+    //                 const langMap: Record<string, string> = {
+    //                     RR: "r",
+    //                     R: "r",
+    //                     python: "python",
+    //                     py: "python",
+    //                     javascript: "js",
+    //                     typescript: "ts",
+    //                     shell: "bash",
+    //                     sh: "bash",
+    //                 };
+    //                 const mappedLang = langMap[lang] || lang.toLowerCase();
+    //                 return `\`\`\`${mappedLang}`;
+    //             }
+    //         );
+
+    //         if (editorRef.current && formattedAnswer) {
+    //             try {
+    //                 editorRef.current.setMarkdown(formattedAnswer);
+    //                 form.setValue("content", formattedAnswer);
+    //                 form.trigger("content");
+    //                 toast.success("Answer generated successfully");
+    //             } catch (editorError) {
+    //                 console.error(
+    //                     "Editor markdown parsing error:",
+    //                     editorError
+    //                 );
+
+    //                 // Try a more gentle approach - just normalize whitespace
+    //                 const normalizedAnswer = formattedAnswer
+    //                     .replace(/\r\n/g, "\n")
+    //                     .replace(/\r/g, "\n")
+    //                     .replace(/\n{3,}/g, "\n\n")
+    //                     .trim();
+
+    //                 try {
+    //                     editorRef.current.setMarkdown(normalizedAnswer);
+    //                     form.setValue("content", normalizedAnswer);
+    //                     form.trigger("content");
+    //                     toast.success("Answer generated successfully");
+    //                 } catch (secondError) {
+    //                     console.error("Second attempt failed:", secondError);
+    //                     toast.error("Failed to format answer", {
+    //                         description:
+    //                             "The generated content could not be properly formatted",
+    //                     });
+    //                 }
+    //             }
+    //         }
+    //     } catch (error) {
+    //         toast.error("Error", {
+    //             description:
+    //                 error instanceof Error
+    //                     ? error.message
+    //                     : "Something went wrong",
+    //         });
+    //     } finally {
+    //         setIsAISubmitting(false);
+    //     }
+    // };
 
     return (
         <div>

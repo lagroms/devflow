@@ -1,12 +1,7 @@
-import { Button } from "@mdxeditor/editor";
-import { Link } from "lucide-react";
-import React from "react";
-
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
-import HomeFilter from "@/components/filters/HomeFilter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
-import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.action";
 
@@ -57,6 +52,8 @@ const TagQuestions = async ({ params, searchParams }: RouteParams) => {
                     </div>
                 )}
             />
+
+            <Pagination page={page} isNext={isNext || false} />
         </>
     );
 };

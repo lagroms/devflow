@@ -20,9 +20,9 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber } from "@/lib/utils";
 
-const QuestionDetailsPage = async ({ params }: RouteParams) => {
+const QuestionDetailsPage = async ({ params, searchParams }: RouteParams) => {
     const { id } = await params;
-
+    const { page, pageSize, filter } = await searchParams;
     const {
         data: question,
         success,
@@ -57,9 +57,9 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
         error: answersError,
     } = await getAnswers({
         questionId: id,
-        page: 1,
-        pageSize: 10,
-        filter: "latest",
+        page: Number(page) || 1,
+        pageSize: Number(pageSize) || 10,
+        filter,
     });
 
     const hasVotedPromise = hasVoted({
@@ -154,6 +154,8 @@ const QuestionDetailsPage = async ({ params }: RouteParams) => {
 
             <section className="my-5">
                 <AllAnswers
+                    page={Number(page) || 1}
+                    isNext={answersData?.isNext || false}
                     data={answersData?.answers}
                     success={answersSuccess}
                     error={answersError}

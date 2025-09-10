@@ -1,6 +1,9 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
+import { CollectionFilters } from "@/constants/filters";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 
@@ -14,7 +17,7 @@ const Collections = async ({ searchParams }: RouteParams) => {
         filter: filter || "",
     });
 
-    const { collections } = data || {};
+    const { collections, isNext } = data || {};
 
     return (
         <>
@@ -26,6 +29,10 @@ const Collections = async ({ searchParams }: RouteParams) => {
                     imgSrc="/icons/search.svg"
                     placeholder="Search questions..."
                     otherClasses="flex-1"
+                />
+                <CommonFilter
+                    filters={CollectionFilters}
+                    otherClasses="min-h-[56px] sm:min-w-[170px] max-sm:w-full"
                 />
             </div>
 
@@ -45,6 +52,8 @@ const Collections = async ({ searchParams }: RouteParams) => {
                     </div>
                 )}
             />
+
+            <Pagination page={page} isNext={isNext || false} />
         </>
     );
 };
